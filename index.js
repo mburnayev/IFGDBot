@@ -1,10 +1,29 @@
+/*
+    @author: @Misha Burnayev
+    @description: Intrusive Family Guy Discord Bot (IFGDBot)
+    @version: 0.1.0
+
+    Holy tome of consultation if something that should work isn't working:
+    https://discord.com/developers/docs/events/gateway#list-of-intents
+
+    Holy tome of consultation if you have run into an impossible error:
+    https://openbible.com/textfiles/kjv.txt
+*/
+
 // Imports
-const { Client, GatewayIntentBits, SlashCommandBuilder, ChannelType } = require("discord.js");
+const { Client, GatewayIntentBits, SlashCommandBuilder } = require("discord.js");
 const { joinVoiceChannel } = require("@discordjs/voice");
 
 // Initialize environment variables and sets commands
 require("dotenv").config();
-const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent] });
+const client = new Client({
+    intents: [
+        GatewayIntentBits.Guilds,
+        GatewayIntentBits.GuildMessages,
+        GatewayIntentBits.MessageContent,
+        GatewayIntentBits.GuildVoiceStates
+    ]
+});
 var peterStatus = false;
 var vcConnection = null;
 

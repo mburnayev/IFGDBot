@@ -5,8 +5,8 @@ This bot was created as a joke per a friend's request, and I thought it would be
 ## Launching the bot
 - Clone this repository, make sure you have Node.js installed
 - Install dependencies: `npm install discord.js dotenv @discordjs/voice`
-- Create a `.env` file, add `DISCORD_TOKEN=<your app token>`
-- Bring the bot online with `node index.js` or simply `node .`, assuming it's in a server
+- Create an `.env` file, add `DISCORD_TOKEN=<your app token>`
+- Bring the bot online with `node index.js` or simply `node .`
 
 ## TODO:
 - [x] Have the bot come online
