@@ -1,7 +1,6 @@
 /*
     @author: @Misha Burnayev
     @description: Intrusive Family Guy Discord Bot (IFGDBot)
-    @version: 0.1.0
 
     Holy tome of consultation if something that should work isn't working:
     https://discord.com/developers/docs/events/gateway#list-of-intents
@@ -11,8 +10,9 @@
 */
 
 // Imports
+const fs = require("fs");
 const { Client, GatewayIntentBits, SlashCommandBuilder } = require("discord.js");
-const { joinVoiceChannel } = require("@discordjs/voice");
+const { joinVoiceChannel, createAudioPlayer, createAudioResource } = require("@discordjs/voice");
 
 // Initialize environment variables and sets commands
 require("dotenv").config();
@@ -24,9 +24,15 @@ const client = new Client({
         GatewayIntentBits.GuildVoiceStates
     ]
 });
+const filesPath = "./assets/sounds/";
+var filesList = [];
+fs.readdir(filesPath, { withFileTypes: true }, (err, item) => {
+    filesList.push(item);
+});
 var peterStatus = false;
 var vcConnection = null;
-// var currChannel = null;
+var audioPlayer = null;
+var audioResource = null;
 
 client.on("ready", (message) => {
     const pOn = new SlashCommandBuilder().setName("peter_on").setDescription("Turns Intrusive Family Guy on");
@@ -51,32 +57,9 @@ client.on("interactionCreate", async (interaction) => {
 
 client.on("voiceStateUpdate", (oldState, newState) => {
     console.log("voiceStateUpdate event triggered");
-    // if ((newState.channelId && oldState.channelId !== newState.channelId) && vcConnection == null) {
-    //     // Join a VC if a user joined one and the bot isn't already in one
-    //     currChannel = newState.guild.channels.cache.get(newState.channelId);
-    //     var members = currChannel.members;
-    //     if (members.size > 0 && peterStatus == true) {
-    //         vcConnection = joinVoiceChannel({
-    //             channelId: currChannel.id,
-    //             guildId: currChannel.guild.id,
-    //             adapterCreator: currChannel.guild.voiceAdapterCreator,
-    //             selfDeaf: false
-    //         });
-    //     }
-    // }
-    // // Disconnect from vc if the bot is the only one left in the vc
-    // else if ((newState.channelId && oldState.channelId !== newState.channelId) && vcConnection != null) {
-    //     var members = currChannel.members;
-    //     // console.log("members: ", members);
-    //     if (members.size == 1 && peterStatus == true) {
-    //         vcConnection.disconnect();
-    //         vcConnection = null;
-    //     }
-    // }
-    // console.log("members.size: ", members.size);
     const USER_LEFT = !newState.channel;
     const USER_JOINED = !oldState.channel;
-    const USER_MOVED = (newState.channel?.id !== oldState.channel?.id) && (!USER_JOINED);
+    const USER_MOVED = (newState.channel?.id !== oldState.channel?.id) && !USER_JOINED && !USER_LEFT;
 
     if (USER_JOINED && (peterStatus == true) && (vcConnection === null)) {
         var currChannel = newState.guild.channels.cache.get(newState.channelId);
@@ -88,6 +71,14 @@ client.on("voiceStateUpdate", (oldState, newState) => {
                 adapterCreator: currChannel.guild.voiceAdapterCreator,
                 selfDeaf: false
             });
+            console.log("made it here");
+            audioPlayer = createAudioPlayer();
+            vcConnection.subscribe(audioPlayer);
+            selectResource = filesList[Math.floor(Math.random() * (filesList.length - 1 + 1)) + 1];
+            console.log(filesPath + selectResource);
+            audioResource = createAudioResource(filesPath + selectResource);
+            audioPlayer.play(audioResource);
+            console.log("made it here x2");
         }
     }
     else if (USER_MOVED && (peterStatus == true) && (vcConnection !== null)) {
@@ -114,6 +105,8 @@ client.on("voiceStateUpdate", (oldState, newState) => {
         if (members.size == 1) {
             vcConnection.disconnect();
             vcConnection = null;
+            audioPlayer.stop();
+            audioPlayer = null;
         }
     }
 })

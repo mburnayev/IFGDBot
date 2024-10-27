@@ -4,7 +4,7 @@ This bot was created as a joke per a friend's request, and I thought it would be
 
 ## Launching the bot
 - Clone this repository, make sure you have Node.js installed
-- Install dependencies: `npm install discord.js dotenv @discordjs/voice`
+- Install dependencies: `npm install discord.js dotenv @discordjs/voice ffmpeg-static libsodium-wrappers`
 - Create an `.env` file, add `DISCORD_TOKEN=<your app token>`
 - Bring the bot online with `node index.js` or simply `node .`
 
