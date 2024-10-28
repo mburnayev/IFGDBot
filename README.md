@@ -1,6 +1,7 @@
 # IFGDBot
 ## Servicing interruptions via unprompted Family Guy cutaway gags!
-This bot was created as a joke per a friend's request, and I thought it would be a quick and funny project.
+This project was started and finished in a weekend (10/25-27/2024); the idea for the bot was pithced as a joke per a friend's request.
+The bot is fully functional, but will be periodically updated to add more Family Guy cutaway gags.
 
 ## Launching the bot
 - Clone this repository, make sure you have Node.js installed
